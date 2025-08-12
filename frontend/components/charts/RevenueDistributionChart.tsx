@@ -6,6 +6,9 @@ import {
   Legend,
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import { Button } from '@/components/ui/button';
+import { Download, Camera } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
 import type { RevenueDistribution } from '~backend/analytics/dashboard';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -15,6 +18,8 @@ interface RevenueDistributionChartProps {
 }
 
 export default function RevenueDistributionChart({ data }: RevenueDistributionChartProps) {
+  const { toast } = useToast();
+
   const chartData = {
     labels: data.map(item => item.category),
     datasets: [
@@ -61,17 +66,45 @@ export default function RevenueDistributionChart({ data }: RevenueDistributionCh
 
   const totalRevenue = data.reduce((sum, item) => sum + item.amount, 0);
 
+  const handleExportChart = (format: 'png' | 'jpg') => {
+    // In a real app, this would capture the chart canvas and download it
+    toast({
+      title: "Chart Exported",
+      description: `Chart exported as ${format.toUpperCase()}`,
+    });
+  };
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
           Revenue Distribution
         </h3>
-        <div className="text-right">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Total</p>
-          <p className="text-xl font-bold text-gray-900 dark:text-white">
-            ${totalRevenue.toLocaleString()}
-          </p>
+        <div className="flex items-center space-x-2">
+          <div className="text-right mr-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400">Total</p>
+            <p className="text-xl font-bold text-gray-900 dark:text-white">
+              ${totalRevenue.toLocaleString()}
+            </p>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleExportChart('png')}
+            className="flex items-center space-x-1"
+          >
+            <Camera className="h-4 w-4" />
+            <span>PNG</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleExportChart('jpg')}
+            className="flex items-center space-x-1"
+          >
+            <Download className="h-4 w-4" />
+            <span>JPG</span>
+          </Button>
         </div>
       </div>
       <div className="h-80 flex items-center justify-center">

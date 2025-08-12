@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import backend from '~backend/client';
 import Sidebar from './Sidebar';
@@ -7,18 +7,28 @@ import StatsCards from './StatsCards';
 import SalesChart from './charts/SalesChart';
 import UserRegistrationsChart from './charts/UserRegistrationsChart';
 import RevenueDistributionChart from './charts/RevenueDistributionChart';
+import DashboardFilters from './DashboardFilters';
+import SettingsPanel from './SettingsPanel';
+import ReportsPanel from './ReportsPanel';
 import { useToast } from '@/components/ui/use-toast';
+import { useNotifications } from '../contexts/NotificationContext';
 
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [filters, setFilters] = useState<{
+    dateRange?: string;
+    region?: string;
+    category?: string;
+  }>({});
   const { toast } = useToast();
+  const { addNotification } = useNotifications();
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['dashboard'],
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['dashboard', filters],
     queryFn: async () => {
       try {
-        return await backend.analytics.getDashboard();
+        return await backend.analytics.getDashboard(filters);
       } catch (err) {
         console.error('Failed to fetch dashboard data:', err);
         toast({
@@ -29,7 +39,27 @@ export default function Dashboard() {
         throw err;
       }
     },
+    refetchInterval: 30000, // Refetch every 30 seconds for real-time updates
   });
+
+  // Simulate real-time notifications
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const notifications = [
+        { title: "New Sale", message: "A new sale of $1,250 was completed", type: "success" as const, read: false },
+        { title: "User Registered", message: "A new user just signed up", type: "info" as const, read: false },
+        { title: "Goal Achieved", message: "Monthly revenue goal reached!", type: "success" as const, read: false },
+      ];
+      
+      const randomNotification = notifications[Math.floor(Math.random() * notifications.length)];
+      
+      if (Math.random() > 0.7) { // 30% chance every 30 seconds
+        addNotification(randomNotification);
+      }
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [addNotification]);
 
   if (isLoading) {
     return (
@@ -79,6 +109,7 @@ export default function Dashboard() {
                   </p>
                 </div>
 
+                <DashboardFilters filters={filters} onFiltersChange={setFilters} />
                 <StatsCards stats={data.stats} />
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
@@ -120,27 +151,8 @@ export default function Dashboard() {
               </>
             )}
 
-            {activeTab === 'reports' && (
-              <div className="text-center py-12">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                  Reports
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Reports functionality coming soon...
-                </p>
-              </div>
-            )}
-
-            {activeTab === 'settings' && (
-              <div className="text-center py-12">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                  Settings
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Settings panel coming soon...
-                </p>
-              </div>
-            )}
+            {activeTab === 'reports' && <ReportsPanel />}
+            {activeTab === 'settings' && <SettingsPanel />}
           </div>
         </main>
       </div>

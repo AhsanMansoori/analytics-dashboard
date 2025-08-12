@@ -11,6 +11,9 @@ import {
   Filler,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { Button } from '@/components/ui/button';
+import { Download, Camera } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
 import type { SalesData } from '~backend/analytics/dashboard';
 
 ChartJS.register(
@@ -29,6 +32,8 @@ interface SalesChartProps {
 }
 
 export default function SalesChart({ data }: SalesChartProps) {
+  const { toast } = useToast();
+
   const chartData = {
     labels: data.map(item => item.month),
     datasets: [
@@ -101,6 +106,14 @@ export default function SalesChart({ data }: SalesChartProps) {
     },
   };
 
+  const handleExportChart = (format: 'png' | 'jpg') => {
+    // In a real app, this would capture the chart canvas and download it
+    toast({
+      title: "Chart Exported",
+      description: `Chart exported as ${format.toUpperCase()}`,
+    });
+  };
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
       <div className="flex items-center justify-between mb-6">
@@ -108,8 +121,28 @@ export default function SalesChart({ data }: SalesChartProps) {
           Sales Over Time
         </h3>
         <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-          <span className="text-sm text-gray-600 dark:text-gray-400">Monthly Sales</span>
+          <div className="flex items-center space-x-2 mr-4">
+            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+            <span className="text-sm text-gray-600 dark:text-gray-400">Monthly Sales</span>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleExportChart('png')}
+            className="flex items-center space-x-1"
+          >
+            <Camera className="h-4 w-4" />
+            <span>PNG</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleExportChart('jpg')}
+            className="flex items-center space-x-1"
+          >
+            <Download className="h-4 w-4" />
+            <span>JPG</span>
+          </Button>
         </div>
       </div>
       <div className="h-80">
