@@ -30,6 +30,45 @@ A modern, responsive analytics dashboard built with React, TypeScript, Chart.js,
   - Data refresh intervals
   - Localization settings
 
+### Enhanced Sidebar Features
+- **Collapsible Design**: Toggle between full and collapsed sidebar for more screen space
+- **Active Link Highlighting**: Visual indicators for current page with smooth transitions
+- **User Profile Section**: Quick access to profile and logout options
+- **Search Functionality**: Find menu items quickly with built-in search
+- **Dynamic Menu Items**: Role-based menu visibility with notification badges
+- **Tooltips**: Helpful tooltips when sidebar is collapsed
+- **Quick Actions**: Shortcut buttons for common tasks
+- **External Links**: Easy access to documentation and support
+- **Version Information**: App version and copyright details
+
+### Profile Management
+- **Comprehensive Profile Page**: Editable user information and preferences
+- **Password Management**: Secure password change functionality
+- **Activity Logging**: Detailed history of user actions and login attempts
+- **Security Settings**: Two-factor authentication and session management
+- **Professional Information**: Work-related details and contact information
+
+### Analytics Explorer
+- **Custom Dashboard Builder**: Drag-and-drop interface for creating custom dashboards
+- **Widget Library**: Various chart types (line, bar, pie, metric cards)
+- **Data Source Integration**: Connect multiple data sources with configurable time ranges
+- **Real-time Preview**: Live preview of dashboard layouts
+- **Export & Save**: Save custom dashboards and export configurations
+
+### Integrations Management
+- **Third-party Connections**: Manage integrations with popular services
+- **Supported Services**: Stripe, Mailchimp, Slack, Salesforce, Google Analytics, Shopify, AWS S3, PostgreSQL
+- **Configuration Management**: Easy setup and configuration of integration settings
+- **Sync Status**: Real-time sync status and activity monitoring
+- **Category Organization**: Organized by service type (Payments, Marketing, CRM, etc.)
+
+### Audit & Compliance
+- **Comprehensive Audit Logs**: Track all user actions and system changes
+- **Security Monitoring**: Failed login attempts and permission violations
+- **Compliance Reporting**: Generate reports for regulatory requirements
+- **Advanced Filtering**: Search and filter logs by user, action, status, and time range
+- **Export Capabilities**: Export audit logs for external analysis
+
 ### Reports & Analytics
 - **Comprehensive Reports**: Generate detailed business reports
 - **Multiple Report Types**: Sales, User Analytics, Performance, and Custom reports
@@ -46,6 +85,7 @@ A modern, responsive analytics dashboard built with React, TypeScript, Chart.js,
 - **Icons**: Lucide React
 - **UI Components**: shadcn/ui
 - **Date Handling**: date-fns
+- **Drag & Drop**: @hello-pangea/dnd
 
 ## Getting Started
 
@@ -94,7 +134,12 @@ Use these credentials to test the application:
 │   │   ├── NotificationPanel.tsx # Notification system
 │   │   ├── ReportsPanel.tsx    # Reports management
 │   │   ├── SettingsPanel.tsx   # User settings
-│   │   ├── Sidebar.tsx         # Navigation sidebar
+│   │   ├── ProfilePage.tsx     # User profile management
+│   │   ├── AnalyticsExplorer.tsx # Custom dashboard builder
+│   │   ├── IntegrationsPanel.tsx # Third-party integrations
+│   │   ├── AuditLogsPanel.tsx  # Audit and compliance logs
+│   │   ├── UserManagementPanel.tsx # User administration
+│   │   ├── Sidebar.tsx         # Enhanced navigation sidebar
 │   │   ├── TopNavbar.tsx       # Top navigation bar
 │   │   └── StatsCards.tsx      # Statistics cards
 │   ├── contexts/
@@ -114,6 +159,44 @@ Use these credentials to test the application:
 - Revenue distribution by category with doughnut chart
 - Real-time activity feed
 - Customizable data refresh intervals
+
+### Enhanced Sidebar
+- **Collapsible Design**: Minimize sidebar to icon-only view for more screen space
+- **Smart Search**: Quickly find menu items with integrated search functionality
+- **Role-Based Navigation**: Menu items automatically filtered based on user permissions
+- **Notification Badges**: Real-time indicators for unread notifications and pending items
+- **Quick Actions**: One-click access to common tasks like creating reports or adding users
+- **User Profile Integration**: Quick access to profile settings and logout
+- **External Resources**: Direct links to documentation and support
+- **Responsive Design**: Optimized for both desktop and mobile experiences
+
+### Profile Management
+- **Personal Information**: Editable profile details including contact information
+- **Professional Details**: Work-related information and company details
+- **Security Settings**: Password management and two-factor authentication setup
+- **Activity History**: Comprehensive log of user actions and login history
+- **Preferences**: Customizable settings for notifications and interface
+
+### Analytics Explorer
+- **Drag & Drop Builder**: Intuitive interface for creating custom dashboards
+- **Widget Variety**: Multiple chart types and metric cards available
+- **Data Source Flexibility**: Connect to various data sources with custom configurations
+- **Real-time Preview**: See how dashboards will look before saving
+- **Export Options**: Save and share custom dashboard configurations
+
+### Integrations Hub
+- **Popular Services**: Pre-built connectors for major business tools
+- **Easy Configuration**: Simple setup process with guided configuration
+- **Status Monitoring**: Real-time sync status and error reporting
+- **Category Organization**: Services grouped by function for easy discovery
+- **Activity Logs**: Track all integration activities and sync operations
+
+### Audit & Compliance
+- **Comprehensive Logging**: Every user action and system change is recorded
+- **Security Focus**: Special attention to authentication and permission events
+- **Advanced Search**: Powerful filtering and search capabilities
+- **Compliance Ready**: Generate reports suitable for regulatory requirements
+- **Export Functionality**: Download logs for external analysis and archiving
 
 ### Authentication System
 - Secure login/logout functionality
@@ -155,13 +238,6 @@ Use these credentials to test the application:
 - Language and timezone selection
 - User profile management
 
-### Reports Panel
-- Multiple report types (Sales, User Analytics, Performance, Custom)
-- Date range selection for reports
-- Report generation and download
-- Historical report access
-- Template downloads
-
 ## API Endpoints
 
 ### Authentication
@@ -182,18 +258,24 @@ Use these credentials to test the application:
 - Can view and generate all reports
 - Access to all settings and configurations
 - User management capabilities
+- Analytics Explorer access
+- Integration management
+- Audit log access
 
 ### Manager
 - Access to dashboard and analytics
 - Can generate reports
 - Limited settings access
-- Cannot manage users
+- Analytics Explorer access
+- Integration management
+- Cannot manage users or view audit logs
 
 ### Viewer
 - Read-only access to dashboard
 - Basic analytics viewing
 - Limited settings (personal preferences only)
 - Cannot generate reports
+- No administrative access
 
 ## Customization
 
@@ -202,6 +284,12 @@ Use these credentials to test the application:
 2. Add the data type to the backend API response
 3. Include the chart in the dashboard layout
 4. Add export functionality
+
+### Adding New Integrations
+1. Define the integration in `IntegrationsPanel.tsx`
+2. Add configuration options and connection logic
+3. Implement sync functionality
+4. Add to the appropriate category
 
 ### Modifying Data
 - Update the mock data in `backend/analytics/dashboard.ts`
@@ -223,52 +311,4 @@ Use these credentials to test the application:
 - Chrome (latest)
 - Firefox (latest)
 - Safari (latest)
-- Edge (latest)
-
-## Performance Features
-
-- Optimized re-renders with React Query
-- Efficient state management with Context API
-- Lazy loading of components
-- Memoized chart data processing
-- Debounced filter updates
-
-## Accessibility
-
-- Keyboard navigation support
-- ARIA labels and roles
-- Screen reader compatibility
-- High contrast mode support
-- Focus management
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## License
-
-This project is open source and available under the MIT License.
-
-## Demo Features
-
-The application includes several demo features for testing:
-- Mock authentication with predefined users
-- Simulated real-time data updates
-- Sample notifications and alerts
-- Demo export functionality
-- Test data for all charts and reports
-
-## Future Enhancements
-
-- Integration with real APIs
-- Advanced chart types (Radar, Scatter, Heatmap)
-- Multi-language support (i18n)
-- Email notification system
-- Advanced user management
-- Data drill-down capabilities
-- Mobile app companion
-- API rate limiting and caching
+- Edge (

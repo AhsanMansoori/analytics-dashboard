@@ -12,6 +12,10 @@ import SettingsPanel from './SettingsPanel';
 import ReportsPanel from './ReportsPanel';
 import NotificationsPanel from './NotificationsPanel';
 import UserManagementPanel from './UserManagementPanel';
+import ProfilePage from './ProfilePage';
+import AnalyticsExplorer from './AnalyticsExplorer';
+import IntegrationsPanel from './IntegrationsPanel';
+import AuditLogsPanel from './AuditLogsPanel';
 import { useToast } from '@/components/ui/use-toast';
 import { useNotifications } from '../contexts/NotificationContext';
 
@@ -147,6 +151,14 @@ export default function Dashboard() {
         return <NotificationsPanel />;
       case 'users':
         return <UserManagementPanel />;
+      case 'profile':
+        return <ProfilePage />;
+      case 'analytics-explorer':
+        return <AnalyticsExplorer />;
+      case 'integrations':
+        return <IntegrationsPanel />;
+      case 'audit-logs':
+        return <AuditLogsPanel />;
       case 'settings':
         return <SettingsPanel />;
       default:

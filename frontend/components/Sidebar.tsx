@@ -15,7 +15,10 @@ import {
   Moon,
   Sun,
   LogOut,
-  User as UserIcon
+  User as UserIcon,
+  TrendingUp,
+  Zap,
+  Shield
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -71,6 +74,13 @@ export default function Sidebar({ isOpen, onClose, activeTab, onTabChange }: Sid
       roles: ['admin', 'manager', 'viewer'] 
     },
     { 
+      id: 'analytics-explorer', 
+      label: 'Analytics Explorer', 
+      icon: TrendingUp, 
+      roles: ['admin', 'manager'],
+      badge: { count: 1, variant: 'secondary' }
+    },
+    { 
       id: 'reports', 
       label: 'Reports', 
       icon: FileText, 
@@ -89,6 +99,24 @@ export default function Sidebar({ isOpen, onClose, activeTab, onTabChange }: Sid
       label: 'User Management', 
       icon: Users, 
       roles: ['admin'] 
+    },
+    { 
+      id: 'integrations', 
+      label: 'Integrations', 
+      icon: Zap, 
+      roles: ['admin', 'manager'] 
+    },
+    { 
+      id: 'audit-logs', 
+      label: 'Audit Logs', 
+      icon: Shield, 
+      roles: ['admin'] 
+    },
+    { 
+      id: 'profile', 
+      label: 'Profile', 
+      icon: UserIcon, 
+      roles: ['admin', 'manager', 'viewer'] 
     },
     { 
       id: 'settings', 
@@ -409,6 +437,17 @@ export default function Sidebar({ isOpen, onClose, activeTab, onTabChange }: Sid
           {/* User Menu Dropdown */}
           {showUserMenu && !isCollapsed && (
             <div className="absolute bottom-full left-0 right-0 mb-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2">
+              <button
+                onClick={() => {
+                  onTabChange('profile');
+                  setShowUserMenu(false);
+                  onClose();
+                }}
+                className="w-full flex items-center px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+              >
+                <UserIcon className="h-4 w-4 mr-3" />
+                <span className="text-sm">Profile</span>
+              </button>
               <button
                 onClick={() => {
                   onTabChange('settings');
