@@ -10,6 +10,8 @@ import RevenueDistributionChart from './charts/RevenueDistributionChart';
 import DashboardFilters from './DashboardFilters';
 import SettingsPanel from './SettingsPanel';
 import ReportsPanel from './ReportsPanel';
+import NotificationsPanel from './NotificationsPanel';
+import UserManagementPanel from './UserManagementPanel';
 import { useToast } from '@/components/ui/use-toast';
 import { useNotifications } from '../contexts/NotificationContext';
 
@@ -84,6 +86,83 @@ export default function Dashboard() {
     );
   }
 
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'dashboard':
+        return (
+          <>
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Analytics Dashboard
+              </h1>
+              <p className="text-gray-600 dark:text-gray-400 mt-2">
+                Welcome back! Here's what's happening with your business.
+              </p>
+            </div>
+
+            <DashboardFilters filters={filters} onFiltersChange={setFilters} />
+            <StatsCards stats={data.stats} />
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              <SalesChart data={data.salesData} />
+              <UserRegistrationsChart data={data.userRegistrations} />
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <RevenueDistributionChart data={data.revenueDistribution} />
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  Recent Activity
+                </h3>
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      New user registered
+                    </span>
+                    <span className="text-xs text-gray-400">2 min ago</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      Sale completed
+                    </span>
+                    <span className="text-xs text-gray-400">5 min ago</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      Report generated
+                    </span>
+                    <span className="text-xs text-gray-400">10 min ago</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        );
+      case 'reports':
+        return <ReportsPanel />;
+      case 'notifications':
+        return <NotificationsPanel />;
+      case 'users':
+        return <UserManagementPanel />;
+      case 'settings':
+        return <SettingsPanel />;
+      default:
+        return (
+          <div className="text-center py-12">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+              Page Not Found
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400">
+              The requested page could not be found.
+            </p>
+          </div>
+        );
+    }
+  };
+
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar 
@@ -98,61 +177,7 @@ export default function Dashboard() {
         
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 dark:bg-gray-900">
           <div className="container mx-auto px-6 py-8">
-            {activeTab === 'dashboard' && (
-              <>
-                <div className="mb-8">
-                  <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                    Analytics Dashboard
-                  </h1>
-                  <p className="text-gray-600 dark:text-gray-400 mt-2">
-                    Welcome back! Here's what's happening with your business.
-                  </p>
-                </div>
-
-                <DashboardFilters filters={filters} onFiltersChange={setFilters} />
-                <StatsCards stats={data.stats} />
-
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                  <SalesChart data={data.salesData} />
-                  <UserRegistrationsChart data={data.userRegistrations} />
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  <RevenueDistributionChart data={data.revenueDistribution} />
-                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                      Recent Activity
-                    </h3>
-                    <div className="space-y-4">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-sm text-gray-600 dark:text-gray-400">
-                          New user registered
-                        </span>
-                        <span className="text-xs text-gray-400">2 min ago</span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        <span className="text-sm text-gray-600 dark:text-gray-400">
-                          Sale completed
-                        </span>
-                        <span className="text-xs text-gray-400">5 min ago</span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                        <span className="text-sm text-gray-600 dark:text-gray-400">
-                          Report generated
-                        </span>
-                        <span className="text-xs text-gray-400">10 min ago</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
-
-            {activeTab === 'reports' && <ReportsPanel />}
-            {activeTab === 'settings' && <SettingsPanel />}
+            {renderContent()}
           </div>
         </main>
       </div>
